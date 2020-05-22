@@ -55,7 +55,6 @@ Thermometer::Thermometer(const Address &address, Range validRange,
       calibrationOffset_(calibrationOffset),
       connected_(false),
       requested_(false),
-      // lastConnected_(millis()),
       temp_() {}
 
 bool Thermometer::requestConversion(DallasTemperature *sensors) {
@@ -81,31 +80,21 @@ void ThermometerController::setup(int resolution) {
   sensors_.setWaitForConversion(false);
   for (int16_t i = 0; i < thermometers_size_; ++i) {
     sensors_.setResolution(thermometers_[i].address(), resolution);
-    Serial.print("Resolution of thermometer ");
-    Serial.print(i);
-    Serial.print(" have been set to ");
-    Serial.print(sensors_.getResolution(thermometers_[i].address()), DEC);
-    Serial.print(" bits.");
-    Serial.println();
+    Serial.printf("Resolution of thermometer %d has been set to %d bits.\n", i,
+                  sensors_.getResolution(thermometers_[i].address()));
   }
   initialized_ = true;
 }
 
 void ThermometerController::locateThermometers() {
-  // locate devices on the bus
+  // Locate devices on the bus.
   Serial.print("Locating thermometers...");
   sensors_.begin();
-  Serial.print("Found ");
-  Serial.print(sensors_.getDeviceCount(), DEC);
-  Serial.println(" devices.");
+  Serial.printf("Found %d devices.\n", sensors_.getDeviceCount());
 
-  // report parasite power requirements
-  Serial.print("Parasite power is: ");
-  if (sensors_.isParasitePowerMode()) {
-    Serial.println("ON");
-  } else {
-    Serial.println("OFF");
-  }
+  // Report parasite power requirements.
+  Serial.printf("Parasite power is: %s\n",
+                sensors_.isParasitePowerMode() ? "ON" : "OFF");
 
   for (int i = 0; i < sensors_.getDeviceCount(); ++i) {
     DeviceAddress address;
