@@ -47,10 +47,8 @@ Thermometer::Address::Address(const String &address) {
   ParseAddress(address.c_str(), &address_);
 }
 
-Thermometer::Thermometer(const Address &address, 
-Range validRange,
-float calibrationOffset,
-                         String label)
+Thermometer::Thermometer(const Address &address, Range validRange,
+                         float calibrationOffset, String label)
     : address_(address),
       validRange_(validRange),
       label_(std::move(label)),
@@ -62,9 +60,6 @@ float calibrationOffset,
 
 bool Thermometer::requestConversion(DallasTemperature *sensors) {
   if (requested_) return true;
-  // // Sometimes, the first conversion request on a noisy OneWire line is flaky.
-  // // Sending the 'dummy' connection check to the device helps to 'stabilize' the
-  // // bus.
   // sensors->isConnected(address());
   connected_ = requested_ = sensors->requestTemperaturesByAddress(address());
 }
