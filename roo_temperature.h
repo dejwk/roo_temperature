@@ -153,7 +153,7 @@ class ThermometerController {
         callback_(callback),
         thermometers_(thermometers),
         thermometers_size_(thermometers_size),
-        permutation_(0, thermometers_size),
+        permutation_(thermometers_size, 0),
         initialized_(false),
         requested_(false) {
     for (int i = 0; i < thermometers_size; i++) {
