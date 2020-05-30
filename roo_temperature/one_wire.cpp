@@ -1,3 +1,5 @@
+#include "one_wire.h"
+
 #include "roo_temperature.h"
 
 namespace roo_temperature {
@@ -43,11 +45,11 @@ inline static void ParseAddress(const char *address, DeviceAddress *target) {
   }
 }
 
-Thermometer::Address::Address(const String &address) {
+OneWireThermometer::Address::Address(const String &address) {
   ParseAddress(address.c_str(), &address_);
 }
 
-Thermometer::Thermometer(const Address &address, Range validRange,
+OneWireThermometer::OneWireThermometer(const Address &address, Range validRange,
                          float calibrationOffset, String label)
     : address_(address),
       validRange_(validRange),
@@ -57,13 +59,13 @@ Thermometer::Thermometer(const Address &address, Range validRange,
       requested_(false),
       temp_() {}
 
-bool Thermometer::requestConversion(DallasTemperature *sensors) {
+bool OneWireThermometer::requestConversion(DallasTemperature *sensors) {
   if (requested_) return true;
   // sensors->isConnected(address());
   connected_ = requested_ = sensors->requestTemperaturesByAddress(address());
 }
 
-bool Thermometer::update(DallasTemperature *sensors) {
+bool OneWireThermometer::update(DallasTemperature *sensors) {
   requested_ = false;
   Temperature reading = TempC(sensors->getTempC(address()));
   if (isWithinValidRange(reading)) {
@@ -75,7 +77,7 @@ bool Thermometer::update(DallasTemperature *sensors) {
   }
 }
 
-void ThermometerController::setup(int resolution) {
+void OneWireController::setup(int resolution) {
   sensors_.begin();
   sensors_.setWaitForConversion(false);
   for (int16_t i = 0; i < thermometers_size_; ++i) {
@@ -86,7 +88,7 @@ void ThermometerController::setup(int resolution) {
   initialized_ = true;
 }
 
-void ThermometerController::locateThermometers() {
+void OneWireController::locateThermometers() {
   // Locate devices on the bus.
   Serial.print("Locating thermometers...");
   sensors_.begin();
