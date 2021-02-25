@@ -16,6 +16,7 @@ class OneWireThermometer : public Thermometer {
    public:
     Address() {}
     Address(const String &address);
+    Address(const char* address);
 
    private:
     friend class OneWireThermometer;
@@ -38,7 +39,7 @@ class OneWireThermometer : public Thermometer {
   OneWireThermometer(const Address &address, Range validRange,
                      float calibrationOffset = 0, String label = "");
 
-  OneWireThermometer(const String &address, float calibrationOffset = 0,
+  OneWireThermometer(const Address &address, float calibrationOffset = 0,
                      String label = "")
       : OneWireThermometer(address, Range(TempC(-120.0), TempC(80.0)),
                            calibrationOffset, label) {}
@@ -47,11 +48,7 @@ class OneWireThermometer : public Thermometer {
     calibrationOffset_ = calibrationOffset;
   }
 
-  Temperature getLastReading() const override { return temp_; }
-
-  roo_time::Uptime getLastReadingTime() const override {
-    return last_conversion_;
-  }
+  Reading getLastReading() const override { return reading_; }
 
   const String &label() const { return label_; }
 
@@ -79,13 +76,8 @@ class OneWireThermometer : public Thermometer {
   bool connected_;
   bool requested_;
 
-  // Last measured temperature, or unknown if never measured, or when the
-  // last reading was erroneous.
-  Temperature temp_;
-
-  // The timestamp of the last completed conversion. Zero if no conversion
-  // has been ever attempted.
-  roo_time::Uptime last_conversion_;
+  // Last correctly measured temperature, or unknown if never measured.
+  Reading reading_;
 };
 
 class OneWireController {

@@ -43,7 +43,7 @@ class Temperature {
   friend Temperature TempC(float);
   friend Temperature TempF(float);
 
-  Temperature(float tempC) : tempC_(tempC) {}
+  explicit Temperature(float tempC) : tempC_(tempC) {}
 
   // Using Celsius for the internal representation, so that integer C
   // temperatures (particularly, zero) behave well when compared for equality.
@@ -58,15 +58,25 @@ inline Temperature TempF(float tempF) {
   return Temperature((tempF - 32.0) / 1.8);
 }
 
+inline Temperature operator+(Temperature a, Temperature b) {
+  return TempC(a.AsC() + b.AsC());
+}
+
+inline Temperature operator-(Temperature a, Temperature b) {
+  return TempC(a.AsC() - b.AsC());
+}
+
 class Thermometer {
  public:
+  struct Reading {
+    Temperature value;
+    roo_time::Uptime time;
+  };
+
   virtual ~Thermometer() {}
 
   // Returns the last known temperature.
-  virtual Temperature getLastReading() const = 0;
-
-  // Returns the uptime as of the last known temperature.
-  virtual roo_time::Uptime getLastReadingTime() const = 0;
+  virtual Reading getLastReading() const = 0;
 };
 
 }  // namespace roo_temperature

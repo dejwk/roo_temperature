@@ -4,8 +4,6 @@
 
 namespace roo_temperature {
 
-static const unsigned long kMaxDisconnectedMs = 5 * 1000;
-
 // function to print a device address
 static void printAddress(const DeviceAddress &deviceAddress) {
   for (uint8_t i = 0; i < 8; i++) {
@@ -45,6 +43,10 @@ inline static void ParseAddress(const char *address, DeviceAddress *target) {
   }
 }
 
+OneWireThermometer::Address::Address(const char* address) {
+  ParseAddress(address, &address_);
+}
+
 OneWireThermometer::Address::Address(const String &address) {
   ParseAddress(address.c_str(), &address_);
 }
@@ -57,7 +59,7 @@ OneWireThermometer::OneWireThermometer(const Address &address, Range validRange,
       calibrationOffset_(calibrationOffset),
       connected_(false),
       requested_(false),
-      temp_() {}
+      reading_() {}
 
 bool OneWireThermometer::requestConversion(DallasTemperature *sensors) {
   if (requested_) return true;
@@ -67,10 +69,12 @@ bool OneWireThermometer::requestConversion(DallasTemperature *sensors) {
 
 bool OneWireThermometer::update(DallasTemperature *sensors) {
   requested_ = false;
-  Temperature reading = TempC(sensors->getTempC(address()));
-  if (isWithinValidRange(reading)) {
-    last_conversion_ = roo_time::Uptime::Now();
-    temp_ = reading;
+  Temperature temp = TempC(sensors->getTempC(address()));
+  if (isWithinValidRange(temp)) {
+    reading_ = {
+      .value = temp,
+      .time = roo_time::Uptime::Now()
+    };
     return true;
   } else {
     return false;
@@ -82,8 +86,6 @@ void OneWireController::setup(int resolution) {
   sensors_.setWaitForConversion(false);
   for (int16_t i = 0; i < thermometers_size_; ++i) {
     sensors_.setResolution(thermometers_[i].address(), resolution);
-    Serial.printf("Resolution of thermometer %d has been set to %d bits.\n", i,
-                  sensors_.getResolution(thermometers_[i].address()));
   }
   initialized_ = true;
 }
