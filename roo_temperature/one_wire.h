@@ -118,8 +118,6 @@ class OneWireController {
     Serial.println("Requesting temperature conversion");
     // Randomize the order so that if the line is flaky, we distribute it among
     // the sensors.
-    int idx[thermometers_size_];
-    for (int i = 0; i < thermometers_size_; i++) idx[i] = i;
     std::random_shuffle(&permutation_[0], &permutation_[thermometers_size_]);
     for (int j = 0; j < 5; j++) {
       bool all = true;
@@ -137,8 +135,6 @@ class OneWireController {
  private:
   void update() {
     requested_ = false;
-    int idx[thermometers_size_];
-    for (int i = 0; i < thermometers_size_; i++) idx[i] = i;
     Serial.println("Temperature conversion completed");
     for (int16_t i = 0; i < thermometers_size_; ++i) {
       thermometers_[permutation_[i]].update(&sensors_);
