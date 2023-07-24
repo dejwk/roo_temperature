@@ -4,6 +4,13 @@
 
 #include <functional>
 
+#ifdef ROO_TESTING
+
+#include "roo_testing/buses/onewire/OneWire.h"
+#include "roo_testing/buses/onewire/fake_onewire.h"
+
+#endif
+
 #include "DallasTemperature.h"
 #include "roo_scheduler.h"
 #include "roo_temperature.h"
