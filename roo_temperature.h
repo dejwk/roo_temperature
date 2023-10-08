@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cmath>
+
 #include "roo_time.h"
 
 namespace roo_temperature {
