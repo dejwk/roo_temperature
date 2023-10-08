@@ -6,6 +6,8 @@
 
 namespace roo_temperature {
 
+// Representation of a temperature, internally stored as floating-point Celsius
+// degrees.
 class Temperature {
  public:
   Temperature() : tempC_(std::nanf("")) {}
