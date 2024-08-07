@@ -1,0 +1,34 @@
+{
+    "name": "roo_temperature",
+    "description": "Type-safe and unit-independent representation of temperature and thermometers. Helps you avoid bugs related to confusing the units or the order of numerical parameters.",
+    "keywords": [
+        "temperature",
+        "thermometer"
+    ],
+    "authors": [
+        {
+            "name": "Dejwk",
+            "email": "dejwk.oss@gmail.com",
+            "maintainer": true
+        }
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/dejwk/roo_temperature"
+    },
+    "version": "1.0.0",
+    "homepage": "https://github.com/dejwk/roo_temperature",
+    "frameworks": [
+        "Arduino"
+    ],
+    "build": {
+        "srcDir": "src",
+        "srcFilter": "+<*> -<examples> -<benchmarks> -<doc> -<test>"
+    },
+    "examples": [
+        "examples/**/*.ino"
+    ],
+    "dependencies": {
+        "dejwk/roo_time": ">0"
+    }
+}
