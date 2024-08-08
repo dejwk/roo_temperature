@@ -16,7 +16,7 @@
         "type": "git",
         "url": "https://github.com/dejwk/roo_temperature"
     },
-    "version": "1.0.0",
+    "version": "1.1.0",
     "homepage": "https://github.com/dejwk/roo_temperature",
     "frameworks": [
         "Arduino"
@@ -30,7 +30,7 @@
     ],
     "dependencies": {
         "dejwk/roo_flags": ">0",
-        "dejwk/roo_logging": ">0",
-        "dejwk/roo_time": ">0"
+        "dejwk/roo_logging": ">=1.0.5",
+        "dejwk/roo_time": ">=1.0.7"
     }
 }
