@@ -13,5 +13,9 @@ cc_library(
     includes = [
         "src",
     ],
-    deps = ["//lib/roo_time"],
+    deps = [
+        "//lib/roo_flags",
+        "//lib/roo_logging",
+        "//lib/roo_time"
+    ],
 )

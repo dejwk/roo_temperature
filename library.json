@@ -29,6 +29,8 @@
         "examples/**/*.ino"
     ],
     "dependencies": {
+        "dejwk/roo_flags": ">0",
+        "dejwk/roo_logging": ">0",
         "dejwk/roo_time": ">0"
     }
 }

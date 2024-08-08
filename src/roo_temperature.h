@@ -2,7 +2,20 @@
 
 #include <cmath>
 
+#include "roo_flags.h"
+#include "roo_logging.h"
 #include "roo_time.h"
+
+#if defined(ESP32) || defined(ESP8266) || defined(__linux__)
+#include <string>
+#endif
+
+#if defined(ARDUINO)
+#include <Arduino.h>
+#endif
+
+ROO_DECLARE_FLAG(char, roo_temperature_default_unit);
+
 
 namespace roo_temperature {
 
@@ -49,6 +62,16 @@ class Temperature {
     return !(tempC_ == other.tempC_);
   }
 
+#if defined(ESP32) || defined(ESP8266) || defined(__linux__)
+  // Returns the string representation of the temperature, using the unit
+  // defined by the 'roo_temperature_default_unit' flag.
+  std::string asString() const;
+#endif
+
+#if defined(ARDUINO)
+  String asArduinoString() const;
+#endif
+
  private:
   friend Temperature Unknown();
 
@@ -62,6 +85,9 @@ class Temperature {
   // temperatures (particularly, zero) behave well when compared for equality.
   float tempC_;
 };
+
+roo_logging::Stream &operator<<(roo_logging::Stream &in, const Temperature &t);
+
 // Returns a temperature object representing an unknown temperature.
 inline Temperature Unknown() { return Temperature(); }
 
