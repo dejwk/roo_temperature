@@ -16,7 +16,6 @@
 
 ROO_DECLARE_FLAG(char, roo_temperature_default_unit);
 
-
 namespace roo_temperature {
 
 // Representation of a temperature, internally stored as floating-point Celsius
@@ -86,7 +85,7 @@ class Temperature {
   float tempC_;
 };
 
-roo_logging::Stream &operator<<(roo_logging::Stream &in, const Temperature &t);
+roo_logging::Stream &operator<<(roo_logging::Stream &os, const Temperature &t);
 
 // Returns a temperature object representing an unknown temperature.
 inline Temperature Unknown() { return Temperature(); }
@@ -137,6 +136,9 @@ class Thermometer {
   // Returns the latest available temperature reading.
   virtual Reading readTemperature() const = 0;
 };
+
+roo_logging::Stream &operator<<(roo_logging::Stream &os,
+                                const Thermometer::Reading &r);
 
 // Reports readings of another thermometer, if they are fresher than a specified
 // expiration threshold. Otherwise, reports Unknown.
