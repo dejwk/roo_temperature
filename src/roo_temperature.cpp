@@ -4,6 +4,7 @@ ROO_FLAG(char, roo_temperature_default_unit, 'C');
 
 namespace roo_temperature {
 namespace {
+
 void TemperatureToString(const Temperature& t, char* out, int maxlen) {
   switch (GET_ROO_FLAG(roo_temperature_default_unit)) {
     case 'F': {
@@ -53,13 +54,6 @@ roo_logging::Stream& operator<<(roo_logging::Stream& os, const Temperature& t) {
   char out[16];
   TemperatureToString(t, out, 16);
   os << out;
-  return os;
-}
-
-roo_logging::Stream& operator<<(roo_logging::Stream& os,
-                                const Thermometer::Reading& r) {
-  os << r.value << " measuread at " << r.time << " ("
-     << (roo_time::Uptime::Now() - r.time) << "s ago)";
   return os;
 }
 
